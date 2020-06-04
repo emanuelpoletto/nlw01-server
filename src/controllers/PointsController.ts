@@ -4,7 +4,7 @@ import knex from '../database/connection';
 
 class PointsController {
   async list(req: Request, res: Response) {
-    const { city, uf, items } = req.query;
+    const { city, state, items } = req.query;
 
     const parsedItems = String(items)
       .split(',')
@@ -14,7 +14,7 @@ class PointsController {
       .join('point_items', 'points.id', '=', 'point_items.point_id')
       .whereIn('point_items.item_id', parsedItems)
       .where('city', String(city))
-      .where('uf', String(uf))
+      .where('state', String(state))
       .distinct()
       .select('points.*');
 
@@ -42,11 +42,11 @@ class PointsController {
     const {
       name,
       email,
-      whatsapp,
+      phone,
       latitude,
       longitude,
       city,
-      uf,
+      state,
       items,
     } = req.body;
 
@@ -56,11 +56,11 @@ class PointsController {
       image: 'https://picsum.photos/300/200',
       name,
       email,
-      whatsapp,
+      phone,
       latitude,
       longitude,
       city,
-      uf,
+      state,
     };
 
     const insertedIds = await trx('points').insert(point);
